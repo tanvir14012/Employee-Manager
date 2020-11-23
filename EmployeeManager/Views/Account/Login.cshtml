@@ -1,7 +1,7 @@
 ﻿@model LoginViewModel
 
-        <div class="col-md-5 mr-5 mt-4 col-sm-12 p-0">
-            <form method="post" class="form p-3  border border-light shadow">
+        <div class="col-md-5 mr-md-auto m-3 mt-4 col-sm-12 p-0">
+            <form method="post" class="form p-4  border border-light shadow-sm">
                 <h3 class="text-muted">Local account login</h3>
                 <div class="form-group">
                     <label asp-for="User">User Email</label>
@@ -27,9 +27,9 @@
             </form>
         </div>
 
-        <div class="col-md-6 col-sm-12 mt-4 p-0">
+        <div class="col-md-6 col-sm-12 mt-4 p-0 m-3">
             <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl"
-                class="form p-3 border border-light shadow">
+                class="form p-4 border border-light shadow-sm">
                 <h3 class="text-muted">External account login</h3>
                 @if(Model.ExternalLogins.Count == 0)
                 {

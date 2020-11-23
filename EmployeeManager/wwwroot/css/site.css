@@ -26,3 +26,11 @@
 .dropdown-item:hover, .dropdown-item:active {
     background-color: #212529 !important;
 }
+
+.objfit-cover {
+    object-fit: cover;
+}
+
+.scale-half {
+    transform: scale(0.5, 0.5);
+}

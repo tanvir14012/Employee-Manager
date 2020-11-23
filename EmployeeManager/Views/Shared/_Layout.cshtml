@@ -5,32 +5,30 @@
 @{
     var user = await userManager.GetUserAsync(User);
     bool hasUserPassword = (user != null) ? await userManager.HasPasswordAsync(user) : false;
+    var userRoles = (user != null ) ? await userManager.GetRolesAsync(user): new List<string>();
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" charset="utf-8" lang="en-us" />
-        <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-        <script src="~/lib/jquery/jquery.js"></script>
-        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-        <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
-        <script src="~/lib/handlebars.js/handlebars.min.js"></script>
-
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
     <title>@ViewBag.Title</title>
 </head>
 <body>
     <div class="container">
-        <nav class="row navbar navbar-expand-lg bg-dark navbar-dark">
-            <button type="button" class="navbar-toggler" data-target="#navList" data-toggle="collapse">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+            <button type="button" class="navbar-toggler" data-target="#navListElements" data-toggle="collapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-between" id="navList">
+            <div class="collapse navbar-collapse justify-content-between" id="navListElements">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <img class="navbar-brand" src="~/images/employee-manager-brand.jpg" width="50" height="50" />
+                        <a class="list-unstyled" href="/">
+                            <img class="navbar-brand rounded-circle" src="~/images/employee-manager-brand.png" width="50" height="50" />
+                        </a>
+
                     </li>
                     @if (signInManager.IsSignedIn(User))
                     {
@@ -41,16 +39,20 @@
                             <a asp-controller="home" asp-action="create" class="nav-link">Create an Employee</a>
                         </li>
                     }
-                    @if (signInManager.IsSignedIn(User) && (User.IsInRole(RoleList.Owner.ToString()) || User.IsInRole(RoleList.Admin.ToString())))
+                    @if (signInManager.IsSignedIn(User) && (userRoles.Contains(RoleList.Owner.ToString()) 
+                        || userRoles.Contains(RoleList.Admin.ToString())))
                     {
                         <li class="nav-item">
-                            <a asp-controller="admin" asp-action="createrole" class="nav-link">Manage Roles</a>
+                            <a asp-controller="Admin" asp-action="ManageRole" class="nav-link">Manage Roles</a>
                         </li>
                     }
                     @if (signInManager.IsSignedIn(User))
                     {
                         <li class="nav-item">
                             <a asp-controller="home" asp-action="generateinvoice" class="nav-link">Generate an Invoice</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="home" asp-action="emailinvoice" class="nav-link">Email an Invoice</a>
                         </li>
                     }
                 </ul>
@@ -72,7 +74,7 @@
                                     </div>
                                 </div>
                             }
-                            </li>
+                        </li>
                     }
                     else
                     {
@@ -90,6 +92,13 @@
             @RenderBody()
         </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/lib/handlebars.js/handlebars.min.js"></script>
     @if (IsSectionDefined("Scripts"))
     {
         @RenderSection("Scripts", required: true);

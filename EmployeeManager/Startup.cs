@@ -17,6 +17,7 @@ using EmployeeManager.Models;
 using EmployeeManager.Services;
 using EmployeeManager.Utilities;
 using Wkhtmltopdf.NetCore;
+using EmployeeManager.Models.Entity;
 
 namespace EmployeeManager
 {
@@ -38,10 +39,9 @@ namespace EmployeeManager
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).AddXmlSerializerFormatters();
 
-            services.AddScoped<IEmployeeCrud, EmployeeCrudDb>();
-
             services.AddDbContextPool<AppDbContext>(options => {
-                options.UseSqlServer(_config.GetConnectionString("DbConn"));
+                options.UseSqlServer(_config.GetConnectionString("DbConn"), 
+                    serverOps => serverOps.CommandTimeout(1200));
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -76,8 +76,10 @@ namespace EmployeeManager
                 options.TokenLifespan = TimeSpan.FromDays(3);
             });
 
-            services.AddWkhtmltopdf();
+            //services.AddWkhtmltopdf(); //For localhost
+            services.AddWkhtmltopdf(System.IO.Path.Combine("wwwroot", "Rotativa")); //For production
 
+            services.AddScoped<IEmployeeCrud, EmployeeCrudDb>();
             services.AddScoped<IRenderViewService, RazorViewRenderService>();
         }
 

@@ -1,0 +1,49 @@
+﻿@model RoleModel
+
+
+<div class="w-100 m-1">
+    <div class="d-flex justify-content-center">
+        <form method="post" class="form m-3 p-4 col-md-6 border border-light shadow-sm">
+            <h3 class="text-muted">Authorization role control panel</h3>
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Name">Role Name</label>
+                <select class="form-control" asp-for="Name" asp-items="@Html.GetEnumSelectList<RoleList>()" ></select>
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AllUserIds">Available Users</label>
+                    @foreach(var user in Model.UserList)
+                    {
+                        <div class="form-check">
+                            <input  class="form-check-input" name="AllUserIds" type="checkbox" id="@user.Uid" value="@user.Email" />
+                            <label class="form-check-label" for="@user.Uid">@user.Email</label>
+                        </div>
+                    }
+            </div>
+            <div class="form-group">
+                <label asp-for="OprMode">Action</label>
+                <select class="form-control" asp-for="OprMode">
+                    <option value="add" selected>Add to role</option>
+                    <option value="remove">Remove from role</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="w-100 p-3">
+        <table class="table">
+            <tr>
+                <th class="w-25">User</th>
+                <th class="w-75">Roles</th>
+            </tr>
+            @foreach (var user in Model.UserList)
+            {
+                <tr>
+                    <td class="w-25">@user.Email</td>
+                    <td class="w-75">@string.Join(", ", user.RoleNames)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

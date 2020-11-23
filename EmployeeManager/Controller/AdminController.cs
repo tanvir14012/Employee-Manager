@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using EmployeeManager.Models;
+using EmployeeManager.Models.DTO;
 
 namespace EmployeeManager.Controller
 {
@@ -22,15 +23,20 @@ namespace EmployeeManager.Controller
 
         [HttpGet]
         [Authorize(Roles = "Owner, Admin")]
-        public IActionResult CreateRole()
+        public async Task<IActionResult> ManageRole()
         {
-            return View();
+            var model = new RoleModel
+            {
+                UserList = await PopulateUsers()
+            };
+            return View(model);
         }
 
         [HttpPost]
         [Authorize(Roles = "Owner, Admin")]
-        public async Task<IActionResult> CreateRole(RoleModel model)
-        {       
+        public async Task<IActionResult> ManageRole(RoleModel model)
+        {
+            model.UserList = await PopulateUsers();
             if (ModelState.IsValid)
             {
                 if(model.AllUserIds != null && model.AllUserIds.Count > 0)
@@ -44,18 +50,29 @@ namespace EmployeeManager.Controller
                         if (user != null)
                         {
                             var role = await roleManager.FindByNameAsync(model.Name.ToString());
-                            if (role == null)
+                            if(model.OprMode == "add")
                             {
-                                  await roleManager.CreateAsync(identityRole);
+                                if (role == null)
+                                {
+                                    await roleManager.CreateAsync(identityRole);
+                                }
+                                result = await userManager.AddToRoleAsync(user, role.Name);
                             }
-                            result = await userManager.AddToRoleAsync(user, role.Name);
+                            else
+                            {
+                                if(role != null)
+                                {
+                                    result = await userManager.RemoveFromRoleAsync(user, role.Name);
+                                }
+                            }
+                            
                         }
 
                     }
 
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("index", "home");
+                        return RedirectToAction("ManageRole");
                     }
                     foreach (IdentityError error in result.Errors)
                     {
@@ -64,8 +81,27 @@ namespace EmployeeManager.Controller
                 }
                 
             }
-
             return View(model);
+        }
+
+
+        private async Task<IList<UserInfo>> PopulateUsers()
+        {
+            var users = userManager.Users.ToList();
+            var usersInfo = new List<UserInfo>();
+
+            foreach(var user in users)
+            {
+                var userInfo = new UserInfo
+                {
+                    Uid = user.Id,
+                    Email = user.Email,
+                    RoleNames = await userManager.GetRolesAsync(user)
+                };
+                usersInfo.Add(userInfo);
+            };
+
+            return usersInfo;
         }
     }
 }

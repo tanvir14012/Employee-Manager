@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using EmployeeManager.Models;
 using EmployeeManager.Services;
+using EmployeeManager.Models.DTO;
 
 namespace EmployeeManager.Controller
 {
@@ -56,8 +57,8 @@ namespace EmployeeManager.Controller
                     var confirmUrl = Url.Action("ConfirmEmail", "Account", new { Id = identityUser.Id, Token = token }, Request.Scheme);
                     var body = new BodyBuilder();
                     body.HtmlBody = $"<h5>Hi {identityUser.UserName.Split("@").First()},</h5>" +
-                        $"<p> please click on this button to varify " +
-                        $"your email at EmployeeManager.</p></br> <a href='{confirmUrl}'>Click here </a> </br>. " +
+                        $"<p> Please click on the following link to verify " +
+                        $"your email at the Employee Manager app.</p></br> <a href='{confirmUrl}'>Click here</a> </br> " +
                         $"<p style='color: orange;'>If you did not make this request, please simply ignore</p>";
 
                     await emailService.SendMailAsync(identityUser.Email, body,

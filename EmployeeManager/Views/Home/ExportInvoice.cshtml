@@ -7,18 +7,13 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" charset="utf-8" lang="en-us" />
-    <environment include="Development">
-        <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-        <script src="~/lib/jquery/jquery.js"></script>
-        <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
-    </environment>
-
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <div class="container p-3">
+    <div class="container p-4">
         <div class="row">
             <div class="col-12 p-2">
                 <h5>Payment Invoice# @Model.Id</h5>
@@ -31,20 +26,21 @@
                 <div>@Model.Vendor.Address.ALineTwo</div>
                 <div><a class="text-body" href="@Model.Vendor.WebAddress">@Model.Vendor.WebAddress</a></div>
             </div>
-            <div class="col-6 p-3 float-right">
+            <div class="col-6 p-4 float-right">
                 <img class="w-75" src="@Model.Vendor.BrandPhotoPath" height="80" />
             </div>
         </div>
-        <div class="row mt-2">
+        <div class="w-100 mt-2">
             <!-- Order Items table starts-->
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
                         <tr class="" style=" background-color: lightgray">
                             <td colspan="2">
-                                <span class="font-weight-bold">ORDER #@Model.Cart.Id</span>
-                                <span class="font-weight-bold ml-2 mr-2">|</span>
-                                <span class="font-weight-bold">CUSTOMER NO #@Model.Customer.Id</span>
+                                <div class="w-100">
+                                    <div class="font-weight-bold float-left w-50">ORDER #@Model.Cart.Id</div>
+                                    <div class="font-weight-bold float-right w-50">CUSTOMER NO #@Model.Customer.Id</div>
+                                </div>
                             </td>
                         </tr>
                     </thead>
@@ -172,22 +168,26 @@
             <!-- Order Items table ends-->
 
             <div class="font-weight-bold p-2">
-                For refund policy related information, please check the website <a class="text-decoration-none" href="thecox.xyz/refund">(https://thecox.xyz/refund)</a> for details.<br>
-                For any query, you can mail us at query@thecox.xyz
+                For refund policy related information, please check the website <a class="text-decoration-none" href="niludigital.com">(https://niludigital.com)</a> for details.<br>
+                For any query, you can mail us at support@niludigital.com
             </div>
 
-            <div class="mt-2 col-12 mx-auto">
-                <div class="shadow p-2 bg-white">
-                    <img src="~/images/payment-logos.jpg" class="img-fluid rounded" />
+            <div class="mt-2 col-12 mx-auto ">
+                <div class="shadow-sm p-2 bg-white text-center">
+                    <img src="~/images/payment-logos.jpg" width="720" height="144" class="img-fluid rounded scale-half objfit-cover" />
                 </div>
             </div>
 
             <div class="mt-2 col-12 mx-auto">
-                <div class="shadow p-2 bg-white">
-                    <img src="~/images/ssl-payment-logo.png" class="img-fluid rounded" />
+                <div class="shadow-sm p-2 bg-white text-center">
+                    <img src="~/images/ssl-payment-logo.png" width="720" height="144" class="img-fluid rounded scale-half objfit-cover" />
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

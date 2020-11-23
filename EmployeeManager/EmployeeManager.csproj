@@ -2,35 +2,30 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+	  <UserSecretsId>db054a7f-cbe8-4e73-af6c-1ca5a6aecb31</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200508150553_Initial.cs" />
-    <Compile Remove="Migrations\20200508150553_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200508152524_Initial.cs" />
-    <Compile Remove="Migrations\20200508152524_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200508153813_Initial.cs" />
-    <Compile Remove="Migrations\20200508153813_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200508154202_Initial.cs" />
-    <Compile Remove="Migrations\20200508154202_Initial.Designer.cs" />
+    <Content Remove="wwwroot\Rotativa\wkhtmltoimage.exe" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Rotativa\Windows\wkhtmltopdf.exe" />
+	  <PackageReference Include="Microsoft.AspNetCore.App" />
+	  <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.14">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+	  <PackageReference Include="NETCore.MailKit" Version="2.0.0" />
+	  <PackageReference Include="Rotativa.AspNetCore" Version="1.1.1" />
+	  <PackageReference Include="Wkhtmltopdf.NetCore" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
-    <PackageReference Include="NETCore.MailKit" Version="2.0.0" />
-    <PackageReference Include="Rotativa.AspNetCore" Version="1.1.1" />
-    <PackageReference Include="Wkhtmltopdf.NetCore" Version="2.0.0" />
+    <None Include="wwwroot\Rotativa\wkhtmltoimage.exe" />
+    <None Include="wwwroot\Rotativa\wkhtmltox.dll" />
   </ItemGroup>
 
 </Project>

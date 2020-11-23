@@ -15,7 +15,8 @@ using MimeKit.Utils;
 using Rotativa.AspNetCore;
 using EmployeeManager.Controller;
 using EmployeeManager.Models;
-using EmployeeManager.Models.Invoice;
+using EmployeeManager.Models.DTO.Invoice;
+using EmployeeManager.Models.Entity;
 
 namespace EmployeeManager.Services
 {
@@ -35,22 +36,22 @@ namespace EmployeeManager.Services
         public async Task SendMailAsync(string toEmail, BodyBuilder bodyBuilder, string subject,
             string emailType = "", string HTMLMessageContent = "")
         {
-            var from = new MailboxAddress(emailSetting.Value.SenderName, emailSetting.Value.SenderEmail);
-            var to = new MailboxAddress(toEmail);
-            var mimemessage = new MimeMessage();
-            mimemessage.From.Add(from);
-            mimemessage.To.Add(to);
-            mimemessage.Body = bodyBuilder.ToMessageBody();
-            mimemessage.Subject = subject;
+                var from = new MailboxAddress(emailSetting.Value.SenderName, emailSetting.Value.SenderEmail);
+                var to = new MailboxAddress(toEmail);
+                var mimemessage = new MimeMessage();
+                mimemessage.From.Add(from);
+                mimemessage.To.Add(to);
+                mimemessage.Body = bodyBuilder.ToMessageBody();
+                mimemessage.Subject = subject;
 
-            using(var client = new SmtpClient())
-            {
-                await client.ConnectAsync(emailSetting.Value.MailServer, emailSetting.Value.MailPort, false);
-                await client.AuthenticateAsync(emailSetting.Value.SenderEmail, emailSetting.Value.SenderPassword);
-                await client.SendAsync(mimemessage);
-                await client.DisconnectAsync(true);
-            }
-            await Task.CompletedTask;
+                using (var client = new SmtpClient())
+                {
+                    await client.ConnectAsync(emailSetting.Value.MailServer, emailSetting.Value.MailPort, emailSetting.Value.EnableSsl);
+                    await client.AuthenticateAsync(emailSetting.Value.SenderEmail, emailSetting.Value.SenderPassword);
+                    await client.SendAsync(mimemessage);
+                    await client.DisconnectAsync(true);
+                }
+                await Task.CompletedTask;
         }
     }
 }

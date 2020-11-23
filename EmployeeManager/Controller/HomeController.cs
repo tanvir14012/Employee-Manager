@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using Rotativa.AspNetCore;
 using EmployeeManager.Models;
-using EmployeeManager.Models.Invoice;
+using EmployeeManager.Models.DTO.Invoice;
 using EmployeeManager.Services;
 using Wkhtmltopdf.NetCore;
+using EmployeeManager.Models.DTO;
+using EmployeeManager.Models.Entity;
 
 namespace EmployeeManager.Controller
 {
@@ -71,7 +73,11 @@ namespace EmployeeManager.Controller
                 {
                     string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", fileName);
                     //System.Diagnostics.Debug.WriteLine(filePath);
-                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                    using(var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        model.Photo.CopyTo(fileStream);
+                    }
+                    
                 }
                 catch (Exception e)
                 {
@@ -130,8 +136,12 @@ namespace EmployeeManager.Controller
                     //save new image
                     var fileName = Guid.NewGuid().ToString() + "_" + employee.Photo.FileName;
                     var newFilePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", fileName);
-                    employee.Photo.CopyTo(new FileStream(newFilePath, FileMode.Create));
-                    employee.PhotoPath = fileName;
+                    using(var fileStream = new FileStream(newFilePath, FileMode.Create))
+                    {
+                        employee.Photo.CopyTo(fileStream);
+                        employee.PhotoPath = fileName;
+                    }
+                    
                 }
                 catch (Exception e)
                 {
@@ -156,6 +166,8 @@ namespace EmployeeManager.Controller
         {
             return View();
         }
+
+
         [HttpPost]
         public IActionResult GenerateInvoice(GenerateInvoiceView model)
         {
@@ -168,7 +180,10 @@ namespace EmployeeManager.Controller
                     {
                         string fileName = "company_logo" + model.CompanyLogo.FileName.Split(".").Last();
                         string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", fileName);
-                        model.CompanyLogo.CopyTo(new FileStream(filePath, FileMode.Create));
+                        using(var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            model.CompanyLogo.CopyTo(fileStream);
+                        }
                         model.Vendor.BrandPhotoPath = filePath;
                     }
                     catch (Exception e)
@@ -205,19 +220,19 @@ namespace EmployeeManager.Controller
                 Id = 16264,
                 Vendor = new Vendor
                 {
-                    Name = "Cox Ltd",
-                    BrandPhotoPath = "/images/brand.jpg",
-                    WebAddress = "https://www.thecox.xyz",
+                    Name = "Company Ltd",
+                    BrandPhotoPath = "/images/employee-manager-brand.jpg",
+                    WebAddress = "https://www.yourdomain.com",
                     Address = new Address
                     {
                         Id = 35,
-                        ALineOne = "450/8 Cox Road, Moghbazar",
-                        ALineTwo = "Ramna, Dhaka",
-                        Country = "Bangladesh",
-                        State = "Dhaka",
-                        Zip = "1217",
-                        Email = "enquery@thecox.xyz",
-                        CellPhone = "+8801465231459"
+                        ALineOne = "Sample address",
+                        ALineTwo = "Sample address",
+                        Country = "Country",
+                        State = "State",
+                        Zip = "1111",
+                        Email = "enquery@yourdomain.com",
+                        CellPhone = "111111111111"
                     }
                 },
                 Customer = new Customer
@@ -226,27 +241,27 @@ namespace EmployeeManager.Controller
                     BillingAddress = new Address
                     {
                         Id = 58,
-                        ALineOne = "264/4 Green road, Nayatola",
-                        ALineTwo = "Ramna, Dhaka 1217",
-                        Country = "Bangladesh",
-                        State = "Dhaka",
-                        Zip = "1217",
-                        Email = "raul45@gmail.com",
-                        CellPhone = "+8801786531238"
+                        ALineOne = "Sample address",
+                        ALineTwo = "Sample address",
+                        Country = "Country",
+                        State = "State",
+                        Zip = "1111",
+                        Email = "user@domain.com",
+                        CellPhone = "111111111111"
                     },
                     HomeAddress = new Address
                     {
                         Id = 58,
-                        ALineOne = "264/4 Green road, Nayatola",
-                        ALineTwo = "Ramna, Dhaka 1217",
-                        Country = "Bangladesh",
-                        State = "Dhaka",
-                        Zip = "1217",
-                        Email = "raul45@gmail.com",
-                        CellPhone = "+8801786531238"
+                        ALineOne = "Sample address",
+                        ALineTwo = "Sample address",
+                        Country = "Country",
+                        State = "State",
+                        Zip = "1111",
+                        Email = "user@domain.com",
+                        CellPhone = "111111111111"
                     },
-                    FirstName = "Raul",
-                    LastName = "Ibrahim"
+                    FirstName = "First Name",
+                    LastName = "Last Name"
                 },
                 Cart = new Cart
                 {
@@ -256,39 +271,39 @@ namespace EmployeeManager.Controller
                         new CartItem
                         {
                             ItemId = 26,
-                            Name = "Amazon 50$ Gift Card",
+                            Name = "Item #1 Name",
                             Discount = 0.0,
-                            Price = 4400.00,
-                            Type = "Gift card",
+                            Price = 00.00,
+                            Type = "Item Type",
                             Vat = 0.0
                         },
 
                         new CartItem
                         {
                             ItemId = 16,
-                            Name = "Fifa 20 PSN Activation Key",
+                            Name = "Item #2 Name",
                             Discount = 0.0,
-                            Price = 2200.00,
-                            Type = "License Key",
+                            Price = 00.00,
+                            Type = "Item TYpe",
                             Vat = 0.0
                         },
 
                         new CartItem
                         {
                             ItemId = 5,
-                            Name = "Kaspersky Total Security 2020 - 1 Year 1 Pc ",
+                            Name = "Item #3 Name",
                             Discount = 0.0,
-                            Price = 1700.00,
-                            Type = "Giftcard",
+                            Price = 00.00,
+                            Type = "Item Type",
                             Vat = 0.0
                         }
                     },
-                    CouponCode = "BOISHAKH",
-                    CouponDiscount = 100.00,
+                    CouponCode = "COUPON",
+                    CouponDiscount = 0.00,
                     Vat = 0.0,
                     Shipping = 0.0,
-                    ItemsTotalPrice = 4400.0 + 2200.0 + 1700.0,
-                    GrandTotalPayable = 4400.0 + 2200.0 + 1700.0 - 100.0
+                    ItemsTotalPrice = 0.0,
+                    GrandTotalPayable = 0.0
 
                 },
 
@@ -296,12 +311,12 @@ namespace EmployeeManager.Controller
                 {
                     CartId = 3168,
                     CustomerId = 14651,
-                    AmountPaid = 4400.0 + 2200.0 + 1700.0 - 100.0,
+                    AmountPaid = 0.0,
                     CardNo = "4321xxxxxxxx4256",
                     CardType = "VISA",
-                    CardStatementShow = "Software shop",
-                    GatewayCurrency = "BDT",
-                    IpAddress = "119.325.213.112",
+                    CardStatementShow = "E Store",
+                    GatewayCurrency = "USD",
+                    IpAddress = "159.325.213.112",
                     Trxtype = "E-commerce",
                     MerchantBankId = "36556 A",
                     BankApprovedCode = "sdaf346s3ad1f3a6sdf63",
@@ -310,6 +325,8 @@ namespace EmployeeManager.Controller
             };
             return View(invoiceModel);
         }
+
+
         [HttpPost]
         public IActionResult ExportInvoice(GenerateInvoiceView model)
         {
@@ -335,7 +352,10 @@ namespace EmployeeManager.Controller
                 {
                     string fileName = "company_logo" + model.CompanyLogo.FileName.Split(".").Last();
                     string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", fileName);
-                    model.CompanyLogo.CopyTo(new FileStream(filePath, FileMode.Create));
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        model.CompanyLogo.CopyTo(fileStream);
+                    }
                     model.Vendor.BrandPhotoPath = filePath;
                 }
                 catch (Exception e)
@@ -373,7 +393,7 @@ namespace EmployeeManager.Controller
             byte[] pdfContent = await pdf.BuildFile(ControllerContext);
             var body = new BodyBuilder();
             body.HtmlBody = mailMessage;
-            body.Attachments.Add(pdf.FileName, pdfContent);
+            //body.Attachments.Add(pdf.FileName, pdfContent);
 
             await emailSender.SendMailAsync(toEmail, body, "Shopping Invoice");
             return RedirectToAction("Index");

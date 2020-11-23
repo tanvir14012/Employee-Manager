@@ -2,7 +2,7 @@
 @using System.ComponentModel
 @using System.Reflection
 
-<form enctype="multipart/form-data" class="form w-100 row mt-4" method="post" asp-action="GenerateInvoice" asp-controller="Home">
+<form enctype="multipart/form-data" class="form w-100 row mt-4 p-3" method="post" asp-action="GenerateInvoice" asp-controller="Home">
     <div class="col-12">
         <h3 class="text-muted">Generate a PDF Invoice</h3>
     </div>
@@ -102,7 +102,7 @@
         <div class="form-row justify-content-end">
             <button type="button" class="btn m-2 btn-light" id="add-item">&#43;</button>
         </div>
-        <div class="form-row  border border-light shadow-sm mt-3" name="item">
+        <div class="form-row  border border-light shadow-sm-sm mt-3" name="item">
             <div class="form-group col-12">
                 <label asp-for="Cart.CartItems[0].Name"></label>
                 <input asp-for="Cart.CartItems[0].Name" class="form-control" type="text" />
@@ -173,13 +173,12 @@
         </div>
     </div>
     <div class="col-12 text-center">
-        <a asp-action="emailinvoice" asp-controller="home" class="btn btn-secondary mt-2 mb-2">Email Invoice</a>
         <button type="submit" class="btn btn-primary mt-2 mb-2">Generate Invoice</button>
     </div>
 </form>
 @section Scripts {
     <script type="text/x-handlebars-template" id="item-template">
-        <div class="form-row  border border-light shadow-sm mt-3" name="item">
+        <div class="form-row  border border-light shadow-sm-sm mt-3" name="item">
             <div class="form-group col-12">
                 <label >Item Name</label>
                 <input name="Cart.CartItems[{{index}}].Name" class="form-control" type="text" />
