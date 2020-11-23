@@ -1,0 +1,228 @@
+﻿@model GenerateInvoiceView
+@using System.ComponentModel
+@using System.Reflection
+
+<form enctype="multipart/form-data" class="form w-100 row mt-4" method="post" asp-action="GenerateInvoice" asp-controller="Home">
+    <div class="col-12">
+        <h3 class="text-muted">Generate a PDF Invoice</h3>
+    </div>
+    <div class="col-12" asp-validation-summary="All"></div>
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <h5 class="text-secondary border border-left-0 border-top-0 border-right-0 border-dark pt-2 pb-2">Company Information</h5>
+        <div class="form-group">
+            <label asp-for="Vendor.Name"></label>
+            <input asp-for="Vendor.Name" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Vendor.WebAddress"></label>
+            <input asp-for="Vendor.WebAddress" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="CompanyLogo"></label>
+            <div>
+                <img class="m-2" width="120" height="120" alt="preview" id="comp-logo-preview" />
+            </div>
+            <div class="custom-file">
+                <input id="photoEl" class="form-control custom-file-input" asp-for="CompanyLogo" />
+                <label id="photoName" class="custom-file-label" for="photoEl">Choose photo..</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Vendor.Address.ALineOne"></label>
+            <input asp-for="Vendor.Address.ALineOne" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Vendor.Address.ALineTwo"></label>
+            <input asp-for="Vendor.Address.ALineTwo" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Vendor.Address.Email"></label>
+            <input asp-for="Vendor.Address.Email" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Vendor.Address.CellPhone"></label>
+            <input asp-for="Vendor.Address.CellPhone" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Vendor.Address.State"></label>
+            <input asp-for="Vendor.Address.State" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Vendor.Address.Zip"></label>
+            <input asp-for="Vendor.Address.Zip" class="form-control" type="number" min="1" max="100000" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Vendor.Address.Country"></label>
+            <select asp-for="Vendor.Address.Country" asp-items="CountryEnum.GetCountryNames()"
+                    class="form-control" type="text"></select>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <h5 class="text-secondary border border-left-0 border-top-0 border-right-0 border-dark pt-2 pb-2">Customer Information</h5>
+        <div class="form-group">
+            <label asp-for="Customer.FirstName"></label>
+            <input asp-for="Customer.FirstName" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.LastName"></label>
+            <input asp-for="Customer.LastName" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.BillingAddress.ALineOne"></label>
+            <input asp-for="Customer.BillingAddress.ALineOne" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.BillingAddress.ALineTwo"></label>
+            <input asp-for="Customer.BillingAddress.ALineTwo" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.BillingAddress.Email"></label>
+            <input asp-for="Customer.BillingAddress.Email" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.BillingAddress.CellPhone"></label>
+            <input asp-for="Customer.BillingAddress.CellPhone" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.BillingAddress.State"></label>
+            <input asp-for="Customer.BillingAddress.State" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.BillingAddress.Zip"></label>
+            <input asp-for="Customer.BillingAddress.Zip" class="form-control" type="number" min="1" max="100000" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.BillingAddress.Country"></label>
+            <select asp-for="Customer.BillingAddress.Country" asp-items="CountryEnum.GetCountryNames()"
+                    class="form-control" type="text"></select>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12" id="item-container">
+        <h5 class="text-secondary border border-left-0 border-top-0 border-right-0 border-dark pt-2 pb-2">Invoice Items</h5>
+        <div class="form-row justify-content-end">
+            <button type="button" class="btn m-2 btn-light" id="add-item">&#43;</button>
+        </div>
+        <div class="form-row  border border-light shadow-sm mt-3" name="item">
+            <div class="form-group col-12">
+                <label asp-for="Cart.CartItems[0].Name"></label>
+                <input asp-for="Cart.CartItems[0].Name" class="form-control" type="text" />
+            </div>
+            <div class="form-group col-3">
+                <label asp-for="Cart.CartItems[0].Quantity"></label>
+                <input type="text" class="form-control" asp-for="Cart.CartItems[0].Quantity" />
+            </div>
+            <div class="form-group col-3">
+                <label asp-for="Cart.CartItems[0].Price"></label>
+                <input type="number" class="form-control" asp-for="Cart.CartItems[0].Price" />
+            </div>
+            <div class="form-group col-3">
+                <label asp-for="Cart.CartItems[0].Vat"></label>
+                <input type="text" class="form-control" asp-for="Cart.CartItems[0].Vat" />
+            </div>
+            <div class="form-group col-3">
+                <label asp-for="Cart.CartItems[0].Discount"></label>
+                <input type="text" class="form-control" asp-for="Cart.CartItems[0].Discount" />
+            </div>
+        </div>
+
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <h5 class="text-secondary border border-left-0 border-top-0 border-right-0 border-dark pt-2 pb-2">Payment Information</h5>
+        <div class="form-row">
+            <div class="form-group col-4">
+                <label asp-for="paymentInfo.CardType"></label>
+                <select class="form-control" asp-for="paymentInfo.CardType">
+                    <option value="VISA">VISA</option>
+                    <option value="MasterCard">MasterCard</option>
+                    <option value="American Express">American Express</option>
+                    <option value="Mobile Banking">Mobile Banking</option>
+                </select>
+            </div>
+            <div class="form-group col-8">
+                <label asp-for="paymentInfo.CardNo"></label>
+                <input asp-for="paymentInfo.CardNo" class="form-control" type="number" maxlength="20" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="paymentInfo.CardStatementShow"></label>
+            <input asp-for="paymentInfo.CardStatementShow" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="paymentInfo.GatewayCurrency"></label>
+            <select class="form-control" asp-for="paymentInfo.GatewayCurrency">
+                <option value="USD">USD</option>
+                <option value="BDT">BDT</option>
+                <option value="EURO">EURO</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="paymentInfo.MerchantBankId"></label>
+            <input asp-for="paymentInfo.MerchantBankId" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="paymentInfo.MerchantBankUid"></label>
+            <input asp-for="paymentInfo.MerchantBankUid" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="paymentInfo.BankApprovedCode"></label>
+            <input asp-for="paymentInfo.BankApprovedCode" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label asp-for="paymentInfo.AmountPaid"></label>
+            <input asp-for="paymentInfo.AmountPaid" class="form-control" type="number" />
+        </div>
+    </div>
+    <div class="col-12 text-center">
+        <a asp-action="emailinvoice" asp-controller="home" class="btn btn-secondary mt-2 mb-2">Email Invoice</a>
+        <button type="submit" class="btn btn-primary mt-2 mb-2">Generate Invoice</button>
+    </div>
+</form>
+@section Scripts {
+    <script type="text/x-handlebars-template" id="item-template">
+        <div class="form-row  border border-light shadow-sm mt-3" name="item">
+            <div class="form-group col-12">
+                <label >Item Name</label>
+                <input name="Cart.CartItems[{{index}}].Name" class="form-control" type="text" />
+            </div>
+            <div class="form-group col-3">
+                <label ">Quantity</label>
+                <input type="text" class="form-control" name="Cart.CartItems[{{index}}].Quantity" />
+            </div>
+            <div class="form-group col-3">
+                <label >Price</label>
+                <input type="number" class="form-control" name="Cart.CartItems[{{index}}].Price" />
+            </div>
+            <div class="form-group col-3">
+                <label >Vat</label>
+                <input type="text" class="form-control" name="Cart.CartItems[{{index}}].Vat" />
+            </div>
+            <div class="form-group col-3">
+                <label>Discount</label>
+                <input type="text" class="form-control" name="Cart.CartItems[{{index}}].Discount" />
+            </div>
+        </div>
+    </script>
+    <script>
+            document.addEventListener("DOMContentLoaded", function (evt) {
+                document.getElementById("photoEl").addEventListener("change", function () {
+                    var fileName = this.value.split("\\").pop();
+                    document.getElementById("photoName").innerHTML = fileName;
+                    if (this.files && this.files.length) {
+                        let fileReader = new FileReader();
+                        fileReader.onload = function () {
+                            document.getElementById("comp-logo-preview").src = fileReader.result;
+                        }
+                        fileReader.readAsDataURL(this.files[0]);
+                    }
+                });
+            });
+
+        document.getElementById("add-item").onclick = function () {
+            let index = document.querySelectorAll("#item-container [name=item]").length;
+            let html = document.querySelector("#item-template").innerHTML;
+            let template = Handlebars.compile(html);
+            let node = new DOMParser().parseFromString(template({ index: index }), "text/html").body.childNodes[0];
+            document.getElementById("item-container").appendChild(node);
+        }
+    </script>
+}
