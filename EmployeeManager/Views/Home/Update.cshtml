@@ -1,0 +1,55 @@
+﻿@model EmployeeUpdateViewModel
+@{
+    var photoPath = "~/images/" + (@Model.PhotoPath ?? "noimage.jpg");
+}
+<div class="w-100 m-1">
+    <div class="d-flex justify-content-center">
+        <form enctype="multipart/form-data" method="post" class="form m-3 p-3 col-md-6 border border-light shadow">
+            <h3 class="text-muted">Update an employee</h3>
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="text-center">
+                <img id="profile-pic" asp-append-version="true" width="240" height="240" src="@photoPath" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input class="form-control" asp-for="Name" value="@Model.Name" />
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email">Email</label>
+                <input class="form-control" asp-for="Email" value="@Model.Email" />
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Department">Department</label>
+                <select class="form-control" value="@Model.Department" asp-for="Department" asp-items="Html.GetEnumSelectList<Dept>()"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Photo">Profile Photo</label>
+                <div class="custom-file">
+                    <input id="photoEl" class="form-control custom-file-input" name="Photo" asp-for="Photo" />
+                    <label id="photoName" class="custom-file-label" for="photoEl">Choose photo..</label>
+                </div>
+            </div>
+            <input type="hidden" asp-for="PhotoPath" value="@Model.PhotoPath" />
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+    @section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", function (evt) {
+                document.getElementById("photoEl").addEventListener("change", function () {
+                    var fileName = this.value.split("\\").pop();
+                    document.getElementById("photoName").innerHTML = fileName;
+                    if (this.files && this.files.length) {
+                        let fileReader = new FileReader();
+                        fileReader.onload = function () {
+                            document.getElementById("profile-pic").src = fileReader.result;
+                        }
+                        fileReader.readAsDataURL(this.files[0]);
+                    }
+                });
+            });
+        </script>
+    }
+</div>

@@ -1,0 +1,35 @@
+﻿@model Employee
+
+@{
+    var photoPath = "~/images/" + (@Model.PhotoPath ?? "noimage.jpg");
+}
+
+<div class="w-100">
+    <div class="d-flex justify-content-center m-3">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h1>@Model.Name</h1>
+                </div>
+
+                <div class="card-body text-center">
+                    <img asp-append-version="true" class="card-img-top" src= "@photoPath" />
+
+                    <h4>Employee ID : @Model.Id</h4>
+                    <h4>Email : @Model.Email</h4>
+                    <h4>Department : @Model.Department</h4>
+
+                </div>
+                <div class="card-footer text-center">
+                    <a href="@Url.Action("index", "home")" class="btn btn-primary">Back</a>
+                    <a asp-controller="home" asp-action="update" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                    <a asp-controller="home" asp-action="delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/customScript.js"></script>
+}

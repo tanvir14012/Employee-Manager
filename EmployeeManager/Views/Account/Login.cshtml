@@ -1,0 +1,49 @@
+﻿@model LoginViewModel
+
+        <div class="col-md-5 mr-5 mt-4 col-sm-12 p-0">
+            <form method="post" class="form p-3  border border-light shadow">
+                <h3 class="text-muted">Local account login</h3>
+                <div class="form-group">
+                    <label asp-for="User">User Email</label>
+                    <input class="form-control" asp-for="User" />
+                    <span class="text-danger" asp-validation-for="User"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Password</label>
+                    <input class="form-control" asp-for="Password" />
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RememberMe">
+                        <input class="custom-checkbox" asp-for="RememberMe" />
+                        @Html.DisplayNameFor(m => m.RememberMe)
+                    </label>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    @Html.ActionLink("Forgot password ?", "ForgotPassword", "Account")
+                </div>
+                <div class="text-danger" asp-validation-summary="All"></div>
+            </form>
+        </div>
+
+        <div class="col-md-6 col-sm-12 mt-4 p-0">
+            <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl"
+                class="form p-3 border border-light shadow">
+                <h3 class="text-muted">External account login</h3>
+                @if(Model.ExternalLogins.Count == 0)
+                {
+                    <h4 class="text-muted">No external login configured</h4>
+                } else
+                {
+                    <div>
+                        @foreach(var provider in Model.ExternalLogins)
+                        {
+                            <button typ="submit" class="btn btn-primary" name="provider"
+                                    title="Login by your @provider.DisplayName account"
+                                    value="@provider.Name">@provider.DisplayName</button>
+                        }
+                    </div>
+                }
+            </form>
+        </div>

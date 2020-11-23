@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Employee>
+
+    <div class="col-12 p-2">
+        <h3 class="text-muted">List of employees</h3>
+    </div>
+    @foreach (var employee in Model)
+    {
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-2 card-deck">
+            <div class="card">
+                <div class="card-header">
+                    <h6>@employee.Name</h6>
+                </div>
+                @{
+                    var photoPath = "~/images/" + (@employee.PhotoPath ?? "noimage.jpg");
+                }
+
+                <img asp-append-version="true" class="card-img-top" src="@photoPath" />
+                <div class="w-100 pb-2 text-center position-absolute bottom-0 bg-light">
+                    @*<a href="@Url.Action("details", "home", new { id = employee.Id})" class="btn btn-warning">Show 2</a>
+                        @Html.ActionLink("Show", "details", "home", new { id = employee.Id})
+                        <a href="home/details/@employee.Id" class="btn btn-primary">View</a>*@
+                    <a asp-controller="home" asp-action="details"
+                       asp-route-id="@employee.Id" class="btn btn-sm mt-2 ml-2 btn-secondary">View</a>
+                    <a asp-controller="home" asp-action="update" asp-route-id="@employee.Id"
+                       class="btn btn-sm mt-2 ml-2 btn-info">Edit</a>
+
+                    <a asp-controller="home" asp-action="delete" asp-route-id="@employee.Id" class="btn btn-sm mt-2 ml-2 btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    }

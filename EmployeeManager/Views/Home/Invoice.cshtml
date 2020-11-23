@@ -1,0 +1,281 @@
+﻿@model Invoice
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" charset="utf-8" lang="en-us" />
+    <environment include="Development">
+        <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    </environment>
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div class="container p-3">
+        <div class="row">
+            <div class="col-6 p-2">
+                <h5>Payment Invoice# @Model.Id</h5>
+                <div>@Model.Vendor.Name</div>
+                <div>@Model.Vendor.Address.ALineOne</div>
+                <div>@Model.Vendor.Address.ALineTwo</div>
+                <div><a class="text-body" href="@Model.Vendor.WebAddress">@Model.Vendor.WebAddress</a></div>
+            </div>
+            <div class="col-6 p-2 d-flex justify-content-end align-items-center">
+                <img class="w-75" src="@Model.Vendor.BrandPhotoPath" height="50" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <!-- Order Items table starts-->
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="" style=" background-color: lightgray">
+                            <td colspan="2">
+                                <span class="font-weight-bold">ORDER #@Model.Cart.Id</span>
+                                <span class="font-weight-bold ml-2 mr-2">|</span>
+                                <span class="font-weight-bold">CUSTOMER NO #@Model.Customer.Id</span>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="w-25">
+                                <div class="font-weight-bold">Customer Address</div>
+                                <div>@Model.Customer.FirstName @Model.Customer.LastName</div>
+                                <div>@Model.Customer.HomeAddress.ALineOne</div>
+                                <div>@Model.Customer.HomeAddress.ALineTwo</div>
+                                <div>@Model.Customer.HomeAddress.Email</div>
+                                <div>@Model.Customer.HomeAddress.CellPhone</div>
+                            </td>
+                            <td class="w-75">
+                                <div class="form-row">
+                                    <div class="col-9">
+                                        <div class="font-weight-bold">Items</div>
+                                    </div>
+                                    <div class="col-3 d-flex justify-content-end">
+                                        <div class="font-weight-bold">Price</div>
+                                    </div>
+                                </div>
+                                @{
+                                    for (var i = 0; i < Model.Cart.CartItems.Count(); i++)
+                                    {
+                                        var item = Model.Cart.CartItems[i];
+                                        <div class="form-row">
+                                            <div class="col-9 p-1 pl-2">
+                                                <div class="d-flex p-0 text-break">
+                                                    <div class="col-2">
+                                                        <span >@(i + 1).</span>
+                                                    </div>
+                                                    <div class="col-10">
+                                                        <span >Item Id #@item.ItemId</span>
+                                                        <span >@item.Name</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex justify-content-end text-break">
+                                                <div class="">BDT @string.Format("{0:0.00}", @item.Price)</div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                }
+                                <div class="form-row d-flex justify-content-end">
+                                        <div class="col-6 d-flex p-0">
+                                            <div class="col-6 text-break p-1">
+                                                Items Subtotal:
+                                            </div>
+                                            <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                                BDT @string.Format("{0:0.00}", @Model.Cart.ItemsTotalPrice)
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="form-row d-flex justify-content-end">
+                                    <div class="col-6 d-flex p-0">
+                                        <div class="col-6 text-break p-1">
+                                            Shipping and Handling:
+                                        </div>
+                                        <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                            BDT @string.Format("{0:0.00}", @Model.Cart.Shipping)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row d-flex justify-content-end">
+                                    <div class="col-6 d-flex p-0">
+                                        <div class="col-6 text-break p-1">
+                                        </div>
+                                        <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                            ---
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row d-flex justify-content-end">
+                                    <div class="col-6 d-flex p-0">
+                                        <div class="col-6 text-break p-1 font-weight-bold">
+                                            Total:
+                                        </div>
+                                        <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                            BDT @string.Format("{0:0.00}", @Model.Cart.ItemsTotalPrice)
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Order Items table ends-->
+            <!-- Payment table starts-->
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="" style="background-color: lightgray;">
+                            <td colspan="2">
+                                <span class="font-weight-bold">PAYMENT INFORMATION</span>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="w-25">
+                                <div class="font-weight-bold">Payment Method</div>
+                                <div>Transaction Type: @Model.paymentInfo.Trxtype</div>
+                                <div>Card Type: @Model.paymentInfo.CardType</div>
+                                <div>Card Number: @Model.paymentInfo.CardNo</div>
+                                <div>Merchant Bank Id: @Model.paymentInfo.MerchantBankId</div>
+                                <div>Merchant Bank Uid: @Model.paymentInfo.MerchantBankUid</div>
+                                <div>Approved Code: @Model.paymentInfo.BankApprovedCode</div>
+                                <div>Transaction Type: @Model.paymentInfo.Trxtype</div>
+                                <div>Ip Address: @Model.paymentInfo.IpAddress</div>
+                                <div>Card Statement Show: @Model.paymentInfo.CardStatementShow</div>
+                                <div>Gateway Currency: @Model.paymentInfo.GatewayCurrency</div>
+                                <div>Amount: @string.Format("{0:0.00}", @Model.paymentInfo.AmountPaid) </div>
+
+                                <div class="mt-4"></div>
+                                <div class="font-weight-bold">Billing Address</div>
+                                <div>@Model.Customer.FirstName @Model.Customer.LastName</div>
+                                <div>@Model.Customer.BillingAddress.ALineOne</div>
+                                <div>@Model.Customer.BillingAddress.ALineTwo</div>
+                                <div>@Model.Customer.BillingAddress.Email</div>
+                                <div>@Model.Customer.BillingAddress.CellPhone</div>
+                            </td>
+                            <td class="w-75">
+                                <div class="form-row">
+                                    <div class="col-9">
+                                        <div class="font-weight-bold">Items</div>
+                                    </div>
+                                    <div class="col-3 d-flex justify-content-end">
+                                        <div class="font-weight-bold">Price</div>
+                                    </div>
+                                </div>
+                                @{
+                                    for (var i = 0; i < Model.Cart.CartItems.Count(); i++)
+                                    {
+                                        var item = Model.Cart.CartItems[i];
+                                        <div class="form-row">
+                                            <div class="col-9 p-1 pl-2">
+                                                <div class="d-flex p-0 text-break">
+                                                    <div class="col-2">
+                                                        <span>@(i + 1).</span>
+                                                    </div>
+                                                    <div class="col-10">
+                                                        <span>Item Id #@item.ItemId</span>
+                                                        <span>@item.Name</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex justify-content-end text-break">
+                                                <div class="">BDT @string.Format("{0:0.00}", @item.Price) </div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                }
+                                <div class="form-row d-flex justify-content-end">
+                                    <div class="col-6 d-flex p-0">
+                                        <div class="col-6 text-break p-1">
+                                            Items Subtotal:
+                                        </div>
+                                        <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                            BDT @string.Format("{0:0.00}", @Model.Cart.ItemsTotalPrice)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row d-flex justify-content-end">
+                                    <div class="col-6 d-flex p-0">
+                                        <div class="col-6 text-break p-1">
+                                            Shipping and Handling:
+                                        </div>
+                                        <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                            BDT @string.Format("{0:0.00}", @Model.Cart.Shipping)
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (Model.Cart.CouponDiscount > 0)
+                                {
+                                    <div class="form-row d-flex justify-content-end">
+                                        <div class="col-6 d-flex p-0">
+                                            <div class="col-6 text-break p-1">
+                                                Coupon Discount (@Model.Cart.CouponCode):
+                                            </div>
+                                            <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                                BDT @string.Format("{0:-0.00}", @Model.Cart.CouponDiscount)
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div class="form-row d-flex justify-content-end">
+                                    <div class="col-6 d-flex p-0">
+                                        <div class="col-6 text-break p-1">
+                                        </div>
+                                        <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                            ---
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row d-flex justify-content-end">
+                                    <div class="col-6 d-flex p-0">
+                                        <div class="col-6 text-break p-1 font-weight-bold">
+                                            Grand Total:
+                                        </div>
+                                        <div class="col-6 p-1 text-break d-flex justify-content-end">
+                                            BDT @string.Format("{0:0.00}", @Model.Cart.GrandTotalPayable)
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Payment table ends-->
+            <div class="font-weight-bold p-2">
+                For refund policy related information, please check the website <a class="text-decoration-none" href="thecox.xyz/refund">(https://thecox.xyz/refund)</a> for details.<br>
+                For any query, you can mail us at query@thecox.xyz
+            </div>
+
+            <div class="mt-3 d-flex justify-content-center col-12">
+                <div class="shadow p-2 bg-white">
+                    <img src="~/images/payment-logos.jpg" class="img-fluid rounded" />
+                </div>
+            </div>
+
+            <div class="mt-3 d-flex justify-content-center col-12">
+                <div class="shadow p-2 bg-white">
+                    <img src="~/images/ssl-payment-logo.png" class="img-fluid rounded"  />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

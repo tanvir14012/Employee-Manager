@@ -1,0 +1,44 @@
+﻿@model RoleModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager
+
+
+<div class="w-100 m-1">
+    <div class="d-flex justify-content-center">
+        <form method="post" class="form m-3 p-3 col-md-6 border border-light shadow">
+            <h3 class="text-muted">Authorization role control panel</h3>
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Name">Role Name</label>
+                <select class="form-control" asp-for="Name" asp-items="@Html.GetEnumSelectList<RoleList>()" ></select>
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AllUserIds">Available Users</label>
+                    @foreach(var user in userManager.Users)
+                    {
+                        <div class="form-check">
+                            <input  class="form-check-input" name="AllUserIds" type="checkbox" id="@user.Id" value="@user.Email" />
+                            <label class="form-check-label" for="@user.Id">@user.UserName</label>
+                        </div>
+                    }
+                </div>
+            <button type="submit" class="btn btn-primary">Add Role</button>
+        </form>
+    </div>
+    <div class="w-100">
+        <table class="table">
+            <tr>
+                <th class="w-25">User</th>
+                <th class="w-75">Roles</th>
+            </tr>
+            @foreach (var user in userManager.Users)
+            {
+                <tr>
+                    <td class="w-25">@User.Identity.Name</td>
+                    <td class="w-75">@string.Join(", ",userManager.GetRolesAsync(user).Result)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
