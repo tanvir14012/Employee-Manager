@@ -1,6 +1,5 @@
 # Employee-Manager
 An ASP.NET Core MVC application with authentication, authoriztion, CRUD operations, PDF export and email delivery of invoices.
-### Live demo: https://empmgr.niludigital.com
 
 - Account registration, login, change/reset password through email link
 - External Google account login
